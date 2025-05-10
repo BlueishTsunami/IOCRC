@@ -17,6 +17,8 @@ def save_services(services: dict):
 	with open(SERVICES_YAML, "w") as f:
 		yaml.safe_dump(services, f)
 
+#def show_services
+
 def setapikey():
 	"""Stores an API key in your system's keyring."""
 	print("Set your API keys. This will add them to your OS keychain via keyring.")

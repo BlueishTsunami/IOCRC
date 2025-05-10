@@ -4,8 +4,12 @@ import keyring
 # Shodan API
 def shodanapi(ioc):
 	"""Queries Shodan for info about an IP."""
-	SHODAN_KEY = keyring.get_password("shodan", "api_key")
-	api = shodan.Shodan(SHODAN_KEY)
+	shodan_key = keyring.get_password("shodan", "api_key")
+	api = shodan.Shodan(shodan_key)
+	if not shodan_key:
+		print("Error: No Shodan API key found. Run 'setkey' first.")
+		return
+	
 	# Lookup the host
 	host = api.host(ioc)
 

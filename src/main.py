@@ -2,23 +2,31 @@ import typer
 from apis.shodan import shodanapi
 from apis.virustotal import vtapi
 from utils.keyring_manager import setapikey
+from utils.validator import validate_input
+
 
 app = typer.Typer()
+
+def test(name: str):
+	print(f"hello {name}")
 
 @app.command()
 def fullscan():
 	ioc = typer.prompt("Enter an IP address to scan: ", type=str)
+	validate_input(ioc)
 	shodanapi(ioc)
 	vtapi(ioc)
 
 @app.command()
 def vt():
 	ioc = typer.prompt("Enter an IP address for VirusTotal: ", type=str)
+	validate_input(ioc)
 	vtapi(ioc)
 
 @app.command()
 def shodan():
 	ioc = typer.prompt("Enter an IP address for Shodan: ", type=str)
+	validate_input(ioc)
 	shodanapi(ioc)
 
 @app.command()
