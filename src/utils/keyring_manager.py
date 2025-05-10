@@ -2,7 +2,7 @@ import keyring
 import yaml
 from pathlib import Path
 
-SERVICES_YAML = Path(__file__).resolve().parent.parent / "config" / "services.yaml"
+SERVICES_YAML = Path(__file__).resolve().parent.parent.parent / "config" / "services.yaml"
 
 def load_services():
 	try:
