@@ -1,7 +1,8 @@
 import typer
-from apis.shodan import shodanapi
-from apis.virustotal import vtapi
-from utils.keyring_manager import setapikey
+from src.apis.shodan import shodanapi
+from src.apis.virustotal import vtapi
+from src.utils.keyring_manager import setapikey
+
 
 app = typer.Typer()
 
