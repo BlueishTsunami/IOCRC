@@ -1,8 +1,10 @@
 import keyring
+import typer
 import yaml
 from pathlib import Path
 
 SERVICES_YAML = Path(__file__).resolve().parent.parent.parent / "config" / "services.yaml"
+SERVICE_LIST = ["shodan","virustotal"]
 
 def load_services():
 	try:
@@ -18,8 +20,22 @@ def save_services(services: dict):
 def setapikey():
 	"""Stores an API key in your system's keyring."""
 	print("Set your API keys. This will add them to your OS keychain via keyring.")
-	keyname = input("Enter the name of the service: ").strip().lower()
-	apikey = input("Enter your API key: ").strip()
+
+	# Display options and get choice
+	print("\nChoose a service:")
+	for i, service in enumerate(SERVICE_LIST, 1):
+		print(f"{i}: {service}")
+	
+	while True:
+		try:
+			choice = int(typer.prompt("Enter the number of the service"))
+			keyname = SERVICE_LIST[choice - 1]
+			print(f"You've chosen '{keyname}'")
+			break
+		except (ValueError, IndexError):
+			print("Invalid selection. Please enter a number from the list.")
+			
+	apikey = typer.prompt(f"Enter your API key for {keyname}").strip()
 	keyring.set_password(keyname, "api_key", apikey)
 	
 	# Open up service.yaml and update with new key
