@@ -7,21 +7,21 @@ def validate_input(value: str) -> str:
     # IP Address
     try:
         ipaddress.ip_address(value)
-        return value
+        return "IP"
     except ValueError:
         pass
     
     # URL
     if re.match(r'([A-Za-z]+://)([-\w]+(?:\.\w[-\w]*)+)(:\d+)?(/[^.!,?\"<>\[\]{}\s\x7F-\xFF]*(?:[.!,?]+[^.!,?\"<>\[\]{}\s\x7F-\xFF]+)*)?', value):
-        return value
+        return "URL"
 
     # Domain
     if re.match(r"\b((?=[a-z0-9-]{1,63}\.)(xn--)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}\b", value):
-        return value
+        return "Domain"
 
     # Hash
     if re.fullmatch(r"^[a-fA-F0-9]{32}$", value) or re.fullmatch(r"^[a-fA-F0-9]{64}$", value):
-        return value
+        return "Hash"
 
     raise typer.BadParameter("Must be a valid IP, URL, domain, or file hash")
 
