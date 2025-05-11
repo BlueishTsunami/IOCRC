@@ -29,15 +29,10 @@ iocrc --help
 
  Usage: iocrc [OPTIONS] COMMAND [ARGS]...
 
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                        |
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation. |
-│ --help                        Show this message and exit.                                                      |
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ fullscan      # Not running yet                                                                                |
-│ vt                                                                                                             |
-│ shodan        # Not running yet                                                                                |
-│ key                                                                                                            |
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────╮
+│ fullscan      # Not running yet                       |
+│ vt                                                    |
+│ shodan        # Not running yet                       |
+│ key                                                   |
+╰───────────────────────────────────────────────────────╯
 ```
