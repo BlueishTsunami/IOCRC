@@ -17,3 +17,6 @@ dependencies = [
 
 [project.scripts]
 iocrc = "main:app"
+
+[tool.uv]
+package = true
