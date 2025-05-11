@@ -1,11 +1,12 @@
 import typer
 from apis.shodan import shodanapi
 from apis.virustotal import vtapi
-from utils.keyring_manager import setapikey
+import utils.keyring_manager as keyring_manager
 from utils.validator import validate_input
 
 
 app = typer.Typer()
+app.add_typer(keyring_manager.app, name="key")
 
 def test(name: str):
 	print(f"hello {name}")
