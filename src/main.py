@@ -7,6 +7,7 @@ from rich.panel import Panel
 # Internal Imports
 from apis.shodan import shodan_scan
 from apis.virustotal import virustotal_scan
+from apis.greynoise import greynoise_scan
 import utils.keyring_manager as keyring_manager
 from utils.validator import validate_input
 
@@ -38,7 +39,11 @@ def fullscan() -> None:
 	ioc_type: str = validate_input(ioc)
 	
 	console.print(Panel.fit("Starting full scan...", style="bold blue"))
-	shodan_scan(ioc)
+	
+	# Run appropriate scans based on IOC type
+	if ioc_type == "IP":
+		shodan_scan(ioc)
+		greynoise_scan(ioc)
 	virustotal_scan(ioc, ioc_type)
 
 @scan.command("vt")
@@ -66,6 +71,19 @@ def shodan_lookup() -> None:
 	ioc: str = typer.prompt("Enter an IP address for Shodan", type=str)
 	validate_input(ioc)
 	shodan_scan(ioc)
+
+@scan.command("greynoise")
+def greynoise_lookup() -> None:
+	"""Execute a GreyNoise-specific lookup.
+
+	This command will:
+	- Validate the input IOC (IP address)
+	- Query the GreyNoise API
+	- Display detailed IP reputation information
+	"""
+	ioc: str = typer.prompt("Enter an IP address for GreyNoise", type=str)
+	validate_input(ioc)
+	greynoise_scan(ioc)
 
 # @key.command()
 # def remove():

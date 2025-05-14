@@ -3,10 +3,14 @@ from typing import Dict, Any, List
 from rich.console import Console
 from rich.table import Table
 from utils.api_utils import get_api_key, display_error, create_result_table, handle_api_response
-from utils.validator import validate_input
+from utils.validator import validate_api_input
 
 # Initialize rich console for formatted output
 console = Console()
+
+API_NAME = "Name of the API"
+VALID_TYPES: List[str] = ["IP", "Domain", "Hash", "URL"]
+ERROR_MESSAGE = f"{API_NAME} only accepts IP addresses as input"
 
 # Define fields to display in the results table
 # Each field should have:
@@ -22,52 +26,48 @@ result_fields = [
     {"label": "Transformed Field", "field": "field5", "fallback": "N/A", "transform": lambda x: str(x).upper() if x else "N/A"},
 ]
 
-def handle_api_response(api_results: Dict[str, Any], ioc: str, ioc_type: str) -> None:
+def handle_template_api_response(response_data: Dict[str, Any], ioc: str, ioc_type: str, raw_output: bool = False) -> None:
     """Handle successful API response.
     
     Args:
-        api_results: API response data
+        response_data: API response data
         ioc: The IOC that was queried
         ioc_type: Type of the IOC
+        raw_output: If True, return raw response data instead of displaying tables
     """
+    
+    if raw_output:
+        return response_data
+    
     # Validate response structure
-    if "data" not in api_results or "attributes" not in api_results["data"]:
+    if "data" not in response_data or "attributes" not in response_data["data"]:
         display_error(
             "Unexpected API response format",
             "The API response is missing required fields",
-            "Template API"
+            API_NAME
         )
         return
 
     # Create results table using the defined fields
-    result_table = create_result_table("Template API Report", result_fields, api_results["data"]["attributes"])
+    result_table = create_result_table("Template API Report", result_fields, response_data["data"]["attributes"])
     
     # Display the table
     console.print(result_table)
 
-def template_scan(ioc: str, ioc_type: str) -> None:
+
+def template_scan(ioc: str, ioc_type: str, raw_output: bool = False) -> None:
     """Queries the template API for information about an IOC.
     
     Args:
         ioc: The IOC to query
         ioc_type: Type of the IOC (IP, Domain, Hash, URL)
+        raw_output: If True, return raw response data instead of displaying tables
     """
-    # Validate input and ensure it matches the provided type
-    try:
-        if not validate_input(ioc):
-            display_error(
-                "Input type mismatch",
-                f"IOC type {ioc_type} is not supported.",
-                "Template API"
-            )
-            return
-    except Exception as e:
-        display_error(
-            "Invalid input",
-            str(e),
-            "Template API"
-        )
-        return
+    # Validate input using validator.py validation function
+    is_valid, error_message = validate_api_input(ioc, API_NAME, VALID_TYPES, ERROR_MESSAGE)
+    if not is_valid:
+        display_error("Invalid input", error_message, API_NAME)
+        return None
 
     # Get API key from keyring
     api_key = get_api_key("template_api")
@@ -75,7 +75,7 @@ def template_scan(ioc: str, ioc_type: str) -> None:
         display_error(
             "No API key found",
             "Run 'iocrc key set' to configure your API key",
-            "Template API"
+            API_NAME
         )
         return
 
