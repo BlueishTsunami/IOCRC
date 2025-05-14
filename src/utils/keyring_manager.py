@@ -1,3 +1,4 @@
+import os
 import keyring
 import typer
 # import yaml
@@ -6,16 +7,36 @@ from typing import Optional
 
 app = typer.Typer()
 
-SERVICE_LIST = ["shodan","virustotal"]
+def get_available_services():
+	"""Get list of available services from the apis directory."""
+	# Get the directory containing this file
+	current_dir = os.path.dirname(os.path.abspath(__file__))
+	# Go up one level to src directory
+	src_dir = os.path.dirname(current_dir)
+	# Path to apis directory
+	apis_dir = os.path.join(src_dir, "apis")
+	
+	# Get all .py files in the apis directory
+	services = []
+	for filename in os.listdir(apis_dir):
+		if filename.endswith(".py") and filename != "__init__.py" and filename != "template_api.py":
+			# Remove .py extension and convert to lowercase
+			service_name = filename[:-3].lower()
+			services.append(service_name)
+	
+	return sorted(services)
 
 def list_configured_services():
-	return [s for s in SERVICE_LIST if keyring.get_password(s, "api_key")]
+	return [s for s in get_available_services() if keyring.get_password(s, "api_key")]
 
 # Set an API key for a service
 @app.command()
 def set(service: Optional[str] = typer.Option(None, help="Service to set API key for", metavar="SERVICE")):
 	"""Stores an API key in your system's keyring."""
 	print("Set your API keys. This will add them to your OS keychain via keyring.")
+
+	# Get available services
+	SERVICE_LIST = get_available_services()
 
 	# If service is provided via command line, use it directly
 	if service and service in SERVICE_LIST:
