@@ -26,6 +26,7 @@ scan = typer.Typer(
 app.add_typer(scan, name="scan")
 app.add_typer(keyring_manager.app, name="key", help="Manage API keys for different services")
 
+# Full Scan Command
 @scan.command("full")
 def fullscan() -> None:
 	"""Execute a comprehensive scan using all available services.
@@ -46,6 +47,7 @@ def fullscan() -> None:
 		greynoise_scan(ioc)
 	virustotal_scan(ioc, ioc_type)
 
+# VirusTotal Scan Command
 @scan.command("vt")
 def vt_scan() -> None:
 	"""Execute a VirusTotal scan.
@@ -59,6 +61,7 @@ def vt_scan() -> None:
 	ioc_type: str = validate_input(ioc)
 	virustotal_scan(ioc, ioc_type)
 
+# Shodan Scan Command
 @scan.command("shodan")
 def shodan_lookup() -> None:
 	"""Execute a Shodan-specific lookup.
@@ -72,6 +75,7 @@ def shodan_lookup() -> None:
 	validate_input(ioc)
 	shodan_scan(ioc)
 
+# GreyNoise Scan Command
 @scan.command("greynoise")
 def greynoise_lookup() -> None:
 	"""Execute a GreyNoise-specific lookup.

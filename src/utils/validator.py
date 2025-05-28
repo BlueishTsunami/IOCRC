@@ -61,6 +61,7 @@ def validate_api_input(input_str: str, api_name: str, valid_types: List[str], er
         
     return True, None
 
+# Test validation function
 def test_validation():
     # close-miss test cases for testing the regex
     test_inputs = [
