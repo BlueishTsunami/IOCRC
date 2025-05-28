@@ -10,8 +10,8 @@ console = Console()
 
 # Define API requirements
 API_NAME = "GreyNoise"
-VALID_TYPES: List[str] = ["IP"]
-ERROR_MESSAGE = "GreyNoise only accepts IP addresses as input"
+VALID_INPUTS: List[str] = ["IP"]
+INPUT_ERROR_MESSAGE = "GreyNoise only accepts IP addresses as input"
 
 # Define fields to display for IP information
 ip_fields = [
@@ -38,7 +38,7 @@ def handle_greynoise_response(response_data: Dict[str, Any], ip: str, raw_output
         return response_data
     
     # Validate response structure
-    if "data" not in response_data or "attributes" not in response_data["data"]:
+    if "ip" not in response_data:
         display_error(
             "Unexpected API response format",
             "The API response is missing required fields",
@@ -47,7 +47,7 @@ def handle_greynoise_response(response_data: Dict[str, Any], ip: str, raw_output
         return
 
     # Create and display IP information table
-    result_table = create_result_table("GreyNoise IP Report", ip_fields, response_data["data"]["attributes"])
+    result_table = create_result_table("GreyNoise IP Report", ip_fields, response_data)
     
     # Display the table
     console.print(result_table)
@@ -83,7 +83,7 @@ def greynoise_scan(ip: str, raw_output: bool = False) -> Optional[Dict[str, Any]
         Raw response data if raw_output is True, None otherwise
     """
     # Validate input using validator.py validation function
-    is_valid, error_message = validate_api_input(ip, API_NAME, VALID_TYPES, ERROR_MESSAGE)
+    is_valid, error_message = validate_api_input(ip, API_NAME, VALID_INPUTS, INPUT_ERROR_MESSAGE)
     if not is_valid:
         display_error("Invalid input", error_message, API_NAME)
         return None
