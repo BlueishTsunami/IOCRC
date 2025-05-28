@@ -38,6 +38,7 @@ def validate_input(input_str: str) -> Optional[str]:
 
     return None
 
+# Validate input for specific API requirements. Returns a tuple of (is_valid, error_message)
 def validate_api_input(input_str: str, api_name: str, valid_types: List[str], error_message: str) -> Tuple[bool, Optional[str]]:
     """Validate input for specific API requirements.
     
