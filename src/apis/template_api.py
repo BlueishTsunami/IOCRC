@@ -9,8 +9,8 @@ from utils.validator import validate_api_input
 console = Console()
 
 API_NAME = "Name of the API"
-VALID_TYPES: List[str] = ["IP", "Domain", "Hash", "URL"]
-ERROR_MESSAGE = f"{API_NAME} only accepts IP addresses as input"
+VALID_INPUTS: List[str] = ["IP", "Domain", "Hash", "URL"]
+INPUT_ERROR_MESSAGE = f"{API_NAME} only accepts IP addresses as input"
 
 # Define fields to display in the results table
 # Each field should have:
@@ -39,7 +39,7 @@ def handle_template_api_response(response_data: Dict[str, Any], ioc: str, ioc_ty
     if raw_output:
         return response_data
     
-    # Validate response structure
+    # Validate response structure, ensure the checks match expected responses.
     if "data" not in response_data or "attributes" not in response_data["data"]:
         display_error(
             "Unexpected API response format",
@@ -64,7 +64,7 @@ def template_scan(ioc: str, ioc_type: str, raw_output: bool = False) -> None:
         raw_output: If True, return raw response data instead of displaying tables
     """
     # Validate input using validator.py validation function
-    is_valid, error_message = validate_api_input(ioc, API_NAME, VALID_TYPES, ERROR_MESSAGE)
+    is_valid, error_message = validate_api_input(ioc, API_NAME, VALID_INPUTS, INPUT_ERROR_MESSAGE)
     if not is_valid:
         display_error("Invalid input", error_message, API_NAME)
         return None

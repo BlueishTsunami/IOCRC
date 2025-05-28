@@ -91,7 +91,7 @@ def handle_api_response(
     if response.status_code == 401:
         display_error(
             "Invalid API key",
-            f"Please check your API key and run 'iocrc key set' to update it",
+            "Please check your API key and run 'iocrc key set' to update it",
             service_name
         )
         return
