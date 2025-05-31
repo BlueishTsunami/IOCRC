@@ -1,5 +1,6 @@
 # External Imports
 from typing import Optional
+from apis.noodler import noodler_scan
 import typer
 from rich.console import Console
 from rich.panel import Panel
@@ -102,6 +103,12 @@ def dumpster_lookup() -> None:
 	ioc: str = typer.prompt("Enter a domain for DNS Dumpster", type=str)
 	ioc_type: str = validate_input(ioc)
 	dumpster_scan(ioc, ioc_type)
+
+@scan.command("noodler")
+def noodler_lookup() -> None:
+	"""Noodlin
+	"""
+	noodler_scan()
 
 # @key.command()
 # def remove():
