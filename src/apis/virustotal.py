@@ -3,15 +3,15 @@ from rich.console import Console
 from rich.table import Table
 from typing import Dict, Any, Optional, Union, List
 from utils.api_utils import get_api_key, display_error, create_result_table, handle_api_response
-from utils.validator import validate_input, validate_api_input
+from utils.validator import validate_api_input
 
 # Initialize rich console for formatted output
 console = Console()
 
 # Define API requirements
 API_NAME = "VirusTotal"
-VALID_TYPES: List[str] = ["IP", "Domain", "Hash", "URL"]
-ERROR_MESSAGE = "VirusTotal accepts IPs, domains, hashes, and URLs"
+VALID_INPUTS: List[str] = ["IP", "Domain", "Hash", "URL"]
+INPUT_ERROR_MESSAGE = "VirusTotal accepts IPs, domains, hashes, and URLs"
 
 # Define fields to display for network-related IOCs (IPs and domains)
 network_fields = [
@@ -86,7 +86,7 @@ def virustotal_scan(ioc: str, ioc_type: str, raw_output: bool = False) -> Option
 		Raw response data if raw_output is True, None otherwise
 	"""
 	# Validate input 
-	is_valid, error_message = validate_api_input(ioc, API_NAME, VALID_TYPES, ERROR_MESSAGE)
+	is_valid, error_message = validate_api_input(ioc, API_NAME, VALID_INPUTS, INPUT_ERROR_MESSAGE)
 	if not is_valid:
 		display_error("Invalid input", error_message, API_NAME)
 		return None

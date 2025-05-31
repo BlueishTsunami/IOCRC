@@ -8,6 +8,7 @@ from rich.panel import Panel
 from apis.shodan import shodan_scan
 from apis.virustotal import virustotal_scan
 from apis.greynoise import greynoise_scan
+from apis.dumpster import dumpster_scan
 import utils.keyring_manager as keyring_manager
 from utils.validator import validate_input
 
@@ -88,6 +89,19 @@ def greynoise_lookup() -> None:
 	ioc: str = typer.prompt("Enter an IP address for GreyNoise", type=str)
 	validate_input(ioc)
 	greynoise_scan(ioc)
+
+@scan.command("dumpster")
+def dumpster_lookup() -> None:
+	"""Execute a DNS Dumpster-specific lookup.
+
+	This command will:
+	- Validate the input IOC (domain)
+	- Query the DNS Dumpster API
+	- Display detailed domain information
+	"""
+	ioc: str = typer.prompt("Enter a domain for DNS Dumpster", type=str)
+	ioc_type: str = validate_input(ioc)
+	dumpster_scan(ioc, ioc_type)
 
 # @key.command()
 # def remove():
